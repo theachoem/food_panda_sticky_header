@@ -35,6 +35,7 @@ class ExampleData {
   static Category category1 = Category(
     title: "ពេញនិយម",
     subtitle: "លក់ដាច់ជាងគេពេលនេះ",
+    isHotSale: true,
     foods: List.generate(
       5,
       (index) {
@@ -43,6 +44,7 @@ class ExampleData {
           price: "1.33",
           comparePrice: "\$1.90",
           imageUrl: images[index % images.length],
+          isHotSale: false,
         );
       },
     ),
@@ -51,6 +53,7 @@ class ExampleData {
   static Category category2 = Category(
     title: "ទិញ១ថែម១",
     subtitle: "រងចាំយ៉ាងតិច 30នាទី",
+    isHotSale: false,
     foods: List.generate(
       3,
       (index) {
@@ -59,6 +62,7 @@ class ExampleData {
           price: "1.33",
           comparePrice: "\$1.90",
           imageUrl: images[index % images.length],
+          isHotSale: index == 2 ? true : false,
         );
       },
     ),
@@ -67,6 +71,7 @@ class ExampleData {
   static Category category3 = Category(
     title: "តែរសជាតិ",
     subtitle: null,
+    isHotSale: false,
     foods: List.generate(
       5,
       (index) {
@@ -75,6 +80,7 @@ class ExampleData {
           price: "1.33",
           comparePrice: "\$1.90",
           imageUrl: images[index % images.length],
+          isHotSale: false,
         );
       },
     ),
@@ -83,6 +89,7 @@ class ExampleData {
   static Category category4 = Category(
     title: "តែទឹកដោះគោ",
     subtitle: "លក់ដាច់ជាងគេពេលនេះ",
+    isHotSale: false,
     foods: List.generate(
       5,
       (index) {
@@ -91,6 +98,7 @@ class ExampleData {
           price: "1.33",
           comparePrice: "\$1.90",
           imageUrl: images[index % images.length],
+          isHotSale: index == 3 ? true : false,
         );
       },
     ),
@@ -134,11 +142,13 @@ class Category {
   String title;
   String? subtitle;
   List<Food> foods;
+  bool isHotSale;
 
   Category({
     required this.title,
     required this.subtitle,
     required this.foods,
+    required this.isHotSale,
   });
 }
 
@@ -147,11 +157,13 @@ class Food {
   String price;
   String comparePrice;
   String imageUrl;
+  bool isHotSale;
 
   Food({
     required this.name,
     required this.price,
     required this.comparePrice,
     required this.imageUrl,
+    required this.isHotSale,
   });
 }

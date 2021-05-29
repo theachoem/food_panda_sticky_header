@@ -40,10 +40,23 @@ class CategorySectionWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              Text(
-                category.title,
-                style: textTheme.headline6,
-                strutStyle: Helper.buildStrutStyle(textTheme.headline6),
+              Row(
+                children: [
+                  if (category.isHotSale)
+                    Container(
+                      margin: const EdgeInsets.only(right: 4.0),
+                      child: Icon(
+                        Icons.whatshot,
+                        color: scheme.primary,
+                        size: 20.0,
+                      ),
+                    ),
+                  Text(
+                    category.title,
+                    style: textTheme.headline6,
+                    strutStyle: Helper.buildStrutStyle(textTheme.headline6),
+                  ),
+                ],
               ),
               const SizedBox(height: 8.0),
               if (category.subtitle != null)
@@ -107,6 +120,20 @@ class CategorySectionWidget extends StatelessWidget {
                         decoration: TextDecoration.lineThrough,
                       ),
                     ),
+                    const SizedBox(width: 8.0),
+                    if (food.isHotSale)
+                      Container(
+                        padding: const EdgeInsets.all(4.0),
+                        decoration: BoxDecoration(
+                          color: scheme.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        child: Icon(
+                          Icons.whatshot,
+                          color: scheme.primary,
+                          size: 16.0,
+                        ),
+                      ),
                   ],
                 ),
               ],
