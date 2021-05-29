@@ -6,12 +6,7 @@ class FIconButton extends StatelessWidget {
     Key? key,
     required this.iconData,
     required this.onPressed,
-    required this.isCollapsed,
   }) : super(key: key);
-
-  /// init `iconSize = 20`
-  /// when isCollapsed iconSize will be scaled to 24
-  final bool isCollapsed;
 
   final IconData iconData;
   final void Function() onPressed;
@@ -26,18 +21,10 @@ class FIconButton extends StatelessWidget {
           height: 48,
           width: 48,
           decoration: buildBoxDecoration(),
-          child: Center(
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
-              alignment: Alignment.center,
-              transformAlignment: Alignment.center,
-              transform: Matrix4.identity()..scale(isCollapsed ? 1.0 : 1.25),
-              child: Icon(
-                iconData,
-                color: scheme.primary,
-                size: 20,
-              ),
-            ),
+          child: Icon(
+            iconData,
+            color: scheme.primary,
+            size: 20,
           ),
         ),
       ),
