@@ -50,7 +50,10 @@ class HeaderClip extends StatelessWidget {
                 const SizedBox(height: 8.0),
                 Center(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 4.0,
+                    ),
                     decoration: BoxDecoration(
                       border: Border.all(color: scheme.surface),
                       borderRadius: BorderRadius.circular(50),
@@ -58,6 +61,7 @@ class HeaderClip extends StatelessWidget {
                     child: Text(
                       "ដឹកជញ្ឌូន: " + data.deliverTime,
                       style: textTheme.caption?.copyWith(color: scheme.surface),
+                      strutStyle: StrutStyle(forceStrutHeight: true),
                     ),
                   ),
                 ),

@@ -55,46 +55,10 @@ class CategorySectionWidget extends StatelessWidget {
                   (index) {
                     final food = category.foods[index];
                     bool isLastIndex = index == category.foods.length - 1;
-                    return Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  food.name,
-                                  style: textTheme.subtitle1,
-                                ),
-                                const SizedBox(height: 16),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "មកពី" + food.price,
-                                      style: textTheme.caption,
-                                    ),
-                                    Text(
-                                      food.comparePrice,
-                                      style: textTheme.caption?.copyWith(
-                                        decoration: TextDecoration.lineThrough,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Image.network(
-                              food.imageUrl,
-                              width: 64,
-                            ),
-                          ],
-                        ),
-                        if (!isLastIndex)
-                          const Divider(height: 16.0)
-                        else
-                          const SizedBox(height: 8.0)
-                      ],
+                    return buildFoodTile(
+                      food: food,
+                      context: context,
+                      isLastIndex: isLastIndex,
                     );
                   },
                 ),
@@ -103,6 +67,57 @@ class CategorySectionWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Column buildFoodTile({
+    required Food food,
+    required BuildContext context,
+    required bool isLastIndex,
+  }) {
+    var textTheme = Theme.of(context).textTheme;
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  food.name,
+                  style: textTheme.subtitle1,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Text(
+                      "មកពី" + food.price + " ",
+                      style: textTheme.caption,
+                      strutStyle: StrutStyle(forceStrutHeight: true),
+                    ),
+                    Text(
+                      food.comparePrice,
+                      strutStyle: StrutStyle(forceStrutHeight: true),
+                      style: textTheme.caption?.copyWith(
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Image.network(
+              food.imageUrl,
+              width: 64,
+            ),
+          ],
+        ),
+        if (!isLastIndex)
+          const Divider(height: 16.0)
+        else
+          const SizedBox(height: 8.0)
+      ],
     );
   }
 }

@@ -51,15 +51,14 @@ class FAppBar extends SliverAppBar {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "ដឺកជញ្ជូន",
+            "ដឹកជញ្ជូន",
             style: textTheme.subtitle1?.copyWith(color: scheme.onSurface),
+            strutStyle: StrutStyle(forceStrutHeight: true),
           ),
           Text(
             data.deliverTime,
-            style: textTheme.caption?.copyWith(
-              color: scheme.primary,
-              height: 0.5,
-            ),
+            style: textTheme.caption?.copyWith(color: scheme.primary),
+            strutStyle: StrutStyle(forceStrutHeight: true),
           ),
         ],
       ),
