@@ -1,9 +1,9 @@
 # Food Panda Sticky Header
 With few simple tricks, we can acheive this sticky UI.
-<br>Download: [app-release.apk](apk/app-release.apk)
+<br>Download: [app-release.apk](android/apk/app-release.apk)
 ### Demo:
 
-![detail](gif/record.gif)
+![detail](assets/gif/record.gif)
 
 
 
