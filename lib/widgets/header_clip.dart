@@ -71,7 +71,7 @@ class HeaderClip extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.star,
+                      Icons.star_rate_rounded,
                       size: 16,
                       color: scheme.surface,
                     ),
