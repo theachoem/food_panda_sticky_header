@@ -111,8 +111,9 @@ class CategorySectionWidget extends StatelessWidget {
                 ),
               ],
             ),
-            Image.network(
-              food.imageUrl,
+            FadeInImage.assetNetwork(
+              placeholder: "",
+              image: food.imageUrl,
               width: 64,
             ),
           ],

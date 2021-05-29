@@ -23,8 +23,9 @@ class HeaderClip extends StatelessWidget {
           Container(
             height: 275,
             color: scheme.primary,
-            child: Image.network(
-              data.backgroundUrl,
+            child: FadeInImage.assetNetwork(
+              placeholder: "",
+              image: data.backgroundUrl,
               width: double.infinity,
               fit: BoxFit.fitWidth,
             ),
