@@ -14,7 +14,7 @@ class PandaHead extends StatelessWidget {
       bottom: -19,
       right: 0.0,
       child: FadeInImage.assetNetwork(
-        placeholder: "",
+        placeholder: 'assets/images/transparent.png',
         image: imageUrl,
         width: 150,
         height: 72,

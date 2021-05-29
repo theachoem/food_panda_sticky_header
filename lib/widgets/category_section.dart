@@ -112,7 +112,7 @@ class CategorySectionWidget extends StatelessWidget {
               ],
             ),
             FadeInImage.assetNetwork(
-              placeholder: "",
+              placeholder: 'assets/images/transparent.png',
               image: food.imageUrl,
               width: 64,
             ),
