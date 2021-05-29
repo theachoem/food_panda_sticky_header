@@ -31,14 +31,26 @@ class FAppBar extends SliverAppBar {
 
   @override
   Widget? get leading {
-    return FIconButton(iconData: Icons.arrow_back, onPressed: () {});
+    return FIconButton(
+      iconData: Icons.arrow_back,
+      onPressed: () {},
+      isCollapsed: this.isCollapsed,
+    );
   }
 
   @override
   List<Widget>? get actions {
     return [
-      FIconButton(iconData: Icons.share_outlined, onPressed: () {}),
-      FIconButton(iconData: Icons.info_outline, onPressed: () {}),
+      FIconButton(
+        iconData: Icons.share_outlined,
+        onPressed: () {},
+        isCollapsed: this.isCollapsed,
+      ),
+      FIconButton(
+        iconData: Icons.info_outline,
+        onPressed: () {},
+        isCollapsed: this.isCollapsed,
+      ),
     ];
   }
 
