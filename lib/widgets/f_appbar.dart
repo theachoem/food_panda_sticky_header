@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_panda_sticky_header/helper/helper.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:food_panda_sticky_header/colors.dart';
 import 'package:food_panda_sticky_header/example_data.dart';
@@ -53,12 +54,13 @@ class FAppBar extends SliverAppBar {
           Text(
             "ដឹកជញ្ជូន",
             style: textTheme.subtitle1?.copyWith(color: scheme.onSurface),
-            strutStyle: StrutStyle(forceStrutHeight: true),
+            strutStyle: Helper.buildStrutStyle(textTheme.subtitle1),
           ),
+          const SizedBox(height: 4.0),
           Text(
             data.deliverTime,
             style: textTheme.caption?.copyWith(color: scheme.primary),
-            strutStyle: StrutStyle(forceStrutHeight: true),
+            strutStyle: Helper.buildStrutStyle(textTheme.caption),
           ),
         ],
       ),

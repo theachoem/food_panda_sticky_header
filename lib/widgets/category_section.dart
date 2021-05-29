@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_panda_sticky_header/helper/helper.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:food_panda_sticky_header/colors.dart';
@@ -42,11 +43,14 @@ class CategorySectionWidget extends StatelessWidget {
               Text(
                 category.title,
                 style: textTheme.headline6,
+                strutStyle: Helper.buildStrutStyle(textTheme.headline6),
               ),
+              const SizedBox(height: 8.0),
               if (category.subtitle != null)
                 Text(
                   category.subtitle!,
-                  style: textTheme.subtitle2?.copyWith(height: 1),
+                  style: textTheme.subtitle2,
+                  strutStyle: Helper.buildStrutStyle(textTheme.subtitle2),
                 ),
               const SizedBox(height: 16),
               Column(
@@ -94,11 +98,11 @@ class CategorySectionWidget extends StatelessWidget {
                     Text(
                       "មកពី" + food.price + " ",
                       style: textTheme.caption,
-                      strutStyle: StrutStyle(forceStrutHeight: true),
+                      strutStyle: Helper.buildStrutStyle(textTheme.caption),
                     ),
                     Text(
                       food.comparePrice,
-                      strutStyle: StrutStyle(forceStrutHeight: true),
+                      strutStyle: Helper.buildStrutStyle(textTheme.caption),
                       style: textTheme.caption?.copyWith(
                         decoration: TextDecoration.lineThrough,
                       ),
