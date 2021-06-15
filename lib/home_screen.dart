@@ -9,8 +9,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   bool isCollapsed = false;
   late AutoScrollController scrollController;
   late TabController tabController;
@@ -49,35 +48,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    buildAppBar() {
-      return FAppBar(
-        data: data,
-        context: context,
-        scrollController: scrollController,
-        expandedHeight: expandedHeight,
-        collapsedHeight: collapsedHeight,
-        isCollapsed: isCollapsed,
-        onCollapsed: onCollapsed,
-        tabController: tabController,
-      );
-    }
-
-    buildBody() {
-      return SliverList(
-        delegate: SliverChildListDelegate(
-          List.generate(data.categories.length, (index) {
-            final category = data.categories[index];
-            return CategorySectionWidget(
-              scrollController: scrollController,
-              tabController: tabController,
-              category: category,
-              index: index,
-            );
-          }),
-        ),
-      );
-    }
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: scheme.background,
@@ -87,6 +57,35 @@ class _HomeScreenState extends State<HomeScreen>
           buildAppBar(),
           buildBody(),
         ],
+      ),
+    );
+  }
+
+  buildAppBar() {
+    return FAppBar(
+      data: data,
+      context: context,
+      scrollController: scrollController,
+      expandedHeight: expandedHeight,
+      collapsedHeight: collapsedHeight,
+      isCollapsed: isCollapsed,
+      onCollapsed: onCollapsed,
+      tabController: tabController,
+    );
+  }
+
+  buildBody() {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        List.generate(data.categories.length, (index) {
+          final category = data.categories[index];
+          return CategorySectionWidget(
+            scrollController: scrollController,
+            tabController: tabController,
+            category: category,
+            index: index,
+          );
+        }),
       ),
     );
   }
