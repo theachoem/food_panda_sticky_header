@@ -5,8 +5,8 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'package:food_panda_sticky_header/colors.dart';
 import 'package:food_panda_sticky_header/example_data.dart';
 
-class CategorySectionWidget extends StatelessWidget {
-  const CategorySectionWidget({
+class CategorySection extends StatelessWidget {
+  const CategorySection({
     Key? key,
     required this.scrollController,
     required this.tabController,
@@ -21,7 +21,6 @@ class CategorySectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var textTheme = Theme.of(context).textTheme;
     return VisibilityDetector(
       key: ValueKey(index),
       onVisibilityChanged: (VisibilityInfo info) {
@@ -32,12 +31,22 @@ class CategorySectionWidget extends StatelessWidget {
         key: ValueKey(index),
         index: index,
         controller: scrollController,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          margin: const EdgeInsets.only(bottom: 16),
-          color: scheme.surface,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        child: buildSectionTile(context),
+      ),
+    );
+  }
+
+  Container buildSectionTile(BuildContext context) {
+    var textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      margin: const EdgeInsets.only(bottom: 16),
+      color: scheme.surface,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
             children: [
               const SizedBox(height: 16),
               Row(
@@ -66,23 +75,23 @@ class CategorySectionWidget extends StatelessWidget {
                   strutStyle: Helper.buildStrutStyle(textTheme.subtitle2),
                 ),
               const SizedBox(height: 16),
-              Column(
-                children: List.generate(
-                  category.foods.length,
-                  (index) {
-                    final food = category.foods[index];
-                    bool isLastIndex = index == category.foods.length - 1;
-                    return buildFoodTile(
-                      food: food,
-                      context: context,
-                      isLastIndex: isLastIndex,
-                    );
-                  },
-                ),
-              )
             ],
           ),
-        ),
+          Column(
+            children: List.generate(
+              category.foods.length,
+              (index) {
+                final food = category.foods[index];
+                bool isLastIndex = index == category.foods.length - 1;
+                return buildFoodTile(
+                  food: food,
+                  context: context,
+                  isLastIndex: isLastIndex,
+                );
+              },
+            ),
+          )
+        ],
       ),
     );
   }
@@ -145,10 +154,7 @@ class CategorySectionWidget extends StatelessWidget {
             ),
           ],
         ),
-        if (!isLastIndex)
-          const Divider(height: 16.0)
-        else
-          const SizedBox(height: 8.0)
+        if (!isLastIndex) const Divider(height: 16.0) else const SizedBox(height: 8.0)
       ],
     );
   }

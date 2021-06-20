@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       delegate: SliverChildListDelegate(
         List.generate(data.categories.length, (index) {
           final category = data.categories[index];
-          return CategorySectionWidget(
+          return CategorySection(
             scrollController: scrollController,
             tabController: tabController,
             category: category,
