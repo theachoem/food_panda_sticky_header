@@ -19,26 +19,26 @@ class CategorySection extends StatelessWidget {
   final Category category;
   final int index;
 
+  void _onVisibilityChanged(VisibilityInfo info) {
+    if (tabController.indexIsChanging == true) return;
+    if (info.visibleFraction == 1) tabController.animateTo(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
       key: ValueKey(index),
-      onVisibilityChanged: (VisibilityInfo info) {
-        if (tabController.indexIsChanging == true) return;
-        if (info.visibleFraction == 1) tabController.animateTo(index);
-      },
+      onVisibilityChanged: _onVisibilityChanged,
       child: AutoScrollTag(
         key: ValueKey(index),
         index: index,
         controller: scrollController,
-        child: buildSectionTile(context),
+        child: _buildSectionTile(context),
       ),
     );
   }
 
-  Container buildSectionTile(BuildContext context) {
-    var textTheme = Theme.of(context).textTheme;
-
+  Widget _buildSectionTile(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       margin: const EdgeInsets.only(bottom: 16),
@@ -46,116 +46,141 @@ class CategorySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            children: [
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  if (category.isHotSale)
-                    Container(
-                      margin: const EdgeInsets.only(right: 4.0),
-                      child: Icon(
-                        Icons.whatshot,
-                        color: scheme.primary,
-                        size: 20.0,
-                      ),
-                    ),
-                  Text(
-                    category.title,
-                    style: textTheme.headline6,
-                    strutStyle: Helper.buildStrutStyle(textTheme.headline6),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8.0),
-              if (category.subtitle != null)
-                Text(
-                  category.subtitle!,
-                  style: textTheme.subtitle2,
-                  strutStyle: Helper.buildStrutStyle(textTheme.subtitle2),
-                ),
-              const SizedBox(height: 16),
-            ],
-          ),
-          Column(
-            children: List.generate(
-              category.foods.length,
-              (index) {
-                final food = category.foods[index];
-                bool isLastIndex = index == category.foods.length - 1;
-                return buildFoodTile(
-                  food: food,
-                  context: context,
-                  isLastIndex: isLastIndex,
-                );
-              },
-            ),
-          )
+          _buildSectionTileHeader(context),
+          _buildFoodTileList(context),
         ],
       ),
     );
   }
 
-  Column buildFoodTile({
-    required Food food,
+  Widget _buildFoodTileList(BuildContext context) {
+    return Column(
+      children: List.generate(
+        category.foods.length,
+        (index) {
+          final food = category.foods[index];
+          bool isLastIndex = index == category.foods.length - 1;
+          return _buildFoodTile(
+            food: food,
+            context: context,
+            isLastIndex: isLastIndex,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSectionTileHeader(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16),
+        _sectionTitle(context),
+        const SizedBox(height: 8.0),
+        category.subtitle != null ? _sectionSubtitle(context) : const SizedBox(),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _sectionTitle(BuildContext context) {
+    return Row(
+      children: [
+        if (category.isHotSale) _buildSectionHoteSaleIcon(),
+        Text(
+          category.title,
+          style: _textTheme(context).headline6,
+          strutStyle: Helper.buildStrutStyle(_textTheme(context).headline6),
+        )
+      ],
+    );
+  }
+
+  Widget _sectionSubtitle(BuildContext context) {
+    return Text(
+      category.subtitle!,
+      style: _textTheme(context).subtitle2,
+      strutStyle: Helper.buildStrutStyle(_textTheme(context).subtitle2),
+    );
+  }
+
+  Widget _buildFoodTile({
     required BuildContext context,
     required bool isLastIndex,
+    required Food food,
   }) {
-    var textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  food.name,
-                  style: textTheme.subtitle1,
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Text(
-                      "មកពី" + food.price + " ",
-                      style: textTheme.caption,
-                      strutStyle: Helper.buildStrutStyle(textTheme.caption),
-                    ),
-                    Text(
-                      food.comparePrice,
-                      strutStyle: Helper.buildStrutStyle(textTheme.caption),
-                      style: textTheme.caption?.copyWith(
-                        decoration: TextDecoration.lineThrough,
-                      ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    if (food.isHotSale)
-                      Container(
-                        padding: const EdgeInsets.all(4.0),
-                        decoration: BoxDecoration(
-                          color: scheme.primary.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Icon(
-                          Icons.whatshot,
-                          color: scheme.primary,
-                          size: 16.0,
-                        ),
-                      ),
-                  ],
-                ),
-              ],
-            ),
-            FadeInImage.assetNetwork(
-              placeholder: 'assets/images/transparent.png',
-              image: food.imageUrl,
-              width: 64,
-            ),
+            _buildFoodDetail(food: food, context: context),
+            _buildFoodImage(food.imageUrl),
           ],
         ),
-        if (!isLastIndex) const Divider(height: 16.0) else const SizedBox(height: 8.0)
+        !isLastIndex ? const Divider(height: 16.0) : const SizedBox(height: 8.0)
       ],
     );
   }
+
+  Widget _buildFoodImage(String url) {
+    return FadeInImage.assetNetwork(
+      placeholder: 'assets/images/transparent.png',
+      image: url,
+      width: 64,
+    );
+  }
+
+  Widget _buildFoodDetail({
+    required BuildContext context,
+    required Food food,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(food.name, style: _textTheme(context).subtitle1),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Text(
+              "មកពី" + food.price + " ",
+              style: _textTheme(context).caption,
+              strutStyle: Helper.buildStrutStyle(_textTheme(context).caption),
+            ),
+            Text(
+              food.comparePrice,
+              strutStyle: Helper.buildStrutStyle(_textTheme(context).caption),
+              style: _textTheme(context).caption?.copyWith(decoration: TextDecoration.lineThrough),
+            ),
+            const SizedBox(width: 8.0),
+            if (food.isHotSale) _buildFoodHotSaleIcon(),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSectionHoteSaleIcon() {
+    return Container(
+      margin: const EdgeInsets.only(right: 4.0),
+      child: Icon(
+        Icons.whatshot,
+        color: scheme.primary,
+        size: 20.0,
+      ),
+    );
+  }
+
+  Widget _buildFoodHotSaleIcon() {
+    return Container(
+      child: Icon(Icons.whatshot, color: scheme.primary, size: 16.0),
+      padding: const EdgeInsets.all(4.0),
+      decoration: BoxDecoration(
+        color: scheme.primary.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+    );
+  }
+
+  TextTheme _textTheme(context) => Theme.of(context).textTheme;
 }
