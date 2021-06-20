@@ -28,8 +28,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   void _listener() {
     double reachCollapsed = expandedHeight - collapsedHeight - 48;
+    if (tabController.indexIsChanging == true) return;
     if (scrollController.offset <= reachCollapsed) {
-      if (tabController.indexIsChanging == true) return;
       tabController.animateTo(0);
     }
   }
