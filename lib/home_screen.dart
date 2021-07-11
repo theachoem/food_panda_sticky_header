@@ -22,15 +22,23 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   final listViewKey = RectGetter.createGlobalKey();
   Map<int, dynamic> itemKeys = {};
 
-  // prevent animate to tap on tab bar
+  // prevent animate when press on tab bar
   bool pauseRectGetterIndex = false;
 
   @override
   void initState() {
     tabController = TabController(length: data.categories.length, vsync: this);
     scrollController = AutoScrollController();
-    super.initState();
     scrollController.addListener(_listener);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.removeListener(_listener);
+    scrollController.dispose();
+    tabController.dispose();
+    super.dispose();
   }
 
   void _listener() {
@@ -48,17 +56,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     }
   }
 
+  List<int> getVisibleItemsIndex() {
+    Rect? rect = RectGetter.getRectFromKey(listViewKey);
+    List<int> items = [];
+    if (rect == null) return items;
+    itemKeys.forEach((index, key) {
+      var itemRect = RectGetter.getRectFromKey(key);
+      if (itemRect != null && !(itemRect.top > rect.bottom || itemRect.bottom < rect.top)) items.add(index);
+    });
+    return items;
+  }
+
   void onCollapsed(bool value) {
     if (this.isCollapsed == value) return;
     setState(() => this.isCollapsed = value);
-  }
-
-  @override
-  void dispose() {
-    scrollController.removeListener(_listener);
-    scrollController.dispose();
-    tabController.dispose();
-    super.dispose();
   }
 
   @override
@@ -77,17 +88,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         ),
       ),
     );
-  }
-
-  List<int> getVisibleItemsIndex() {
-    Rect? rect = RectGetter.getRectFromKey(listViewKey);
-    List<int> items = [];
-    if (rect == null) return items;
-    itemKeys.forEach((index, key) {
-      var itemRect = RectGetter.getRectFromKey(key);
-      if (itemRect != null && !(itemRect.top > rect.bottom || itemRect.bottom < rect.top)) items.add(index);
-    });
-    return items;
   }
 
   SliverAppBar buildAppBar() {
