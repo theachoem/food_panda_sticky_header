@@ -1,44 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:food_panda_sticky_header/helper/helper.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 import 'package:food_panda_sticky_header/colors.dart';
 import 'package:food_panda_sticky_header/example_data.dart';
 
 class CategorySection extends StatelessWidget {
   const CategorySection({
     Key? key,
-    required this.scrollController,
-    required this.tabController,
     required this.category,
-    required this.index,
   }) : super(key: key);
 
-  final AutoScrollController scrollController;
-  final TabController tabController;
   final Category category;
-  final int index;
-
-  void _onVisibilityChanged(VisibilityInfo info) {
-    if (tabController.indexIsChanging == true) return;
-    if (info.visibleFraction == 1) tabController.animateTo(index);
-  }
 
   @override
   Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: ValueKey(index),
-      onVisibilityChanged: _onVisibilityChanged,
-      child: AutoScrollTag(
-        key: ValueKey(index),
-        index: index,
-        controller: scrollController,
-        child: _buildSectionTile(context),
-      ),
-    );
-  }
-
-  Widget _buildSectionTile(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       margin: const EdgeInsets.only(bottom: 16),
