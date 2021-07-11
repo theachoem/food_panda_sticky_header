@@ -44,9 +44,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void _listener() {
     double reachCollapsed = expandedHeight - collapsedHeight - 48;
     if (tabController.indexIsChanging == true) return;
-    if (scrollController.offset <= reachCollapsed) {
+
+    bool reachFirstIndex = scrollController.offset <= reachCollapsed;
+    bool reachLastIndex = scrollController.offset >= scrollController.position.maxScrollExtent - 20;
+
+    if (reachFirstIndex) {
       tabController.animateTo(0);
-    } else if (scrollController.offset >= scrollController.position.maxScrollExtent - 20) {
+    } else if (reachLastIndex) {
       tabController.animateTo(tabController.length - 1);
     } else {
       if (pauseRectGetterIndex) return;
@@ -61,8 +65,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     List<int> items = [];
     if (rect == null) return items;
     itemKeys.forEach((index, key) {
-      var itemRect = RectGetter.getRectFromKey(key);
-      if (itemRect != null && !(itemRect.top > rect.bottom || itemRect.bottom < rect.top)) items.add(index);
+      Rect? itemRect = RectGetter.getRectFromKey(key);
+      if (itemRect == null) return;
+      if (itemRect.top > rect.bottom) return;
+      if (itemRect.bottom < rect.top) return;
+      items.add(index);
     });
     return items;
   }
