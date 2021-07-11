@@ -14,6 +14,7 @@ class FAppBar extends SliverAppBar {
   final AutoScrollController scrollController;
   final TabController tabController;
   final void Function(bool isCollapsed) onCollapsed;
+  final void Function(int index) onTap;
 
   FAppBar({
     required this.data,
@@ -23,6 +24,7 @@ class FAppBar extends SliverAppBar {
     required this.collapsedHeight,
     required this.scrollController,
     required this.onCollapsed,
+    required this.onTap,
     required this.tabController,
   }) : super(elevation: 4.0, pinned: true, forceElevated: true);
 
@@ -84,9 +86,7 @@ class FAppBar extends SliverAppBar {
           tabs: data.categories.map((e) {
             return Tab(text: e.title);
           }).toList(),
-          onTap: (int index) {
-            scrollController.scrollToIndex(index);
-          },
+          onTap: onTap,
         ),
       ),
     );
@@ -100,8 +100,7 @@ class FAppBar extends SliverAppBar {
         BoxConstraints constraints,
       ) {
         final top = constraints.constrainHeight();
-        final collapsedHight =
-            MediaQuery.of(context).viewPadding.top + kToolbarHeight + 48;
+        final collapsedHight = MediaQuery.of(context).viewPadding.top + kToolbarHeight + 48;
         WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
           onCollapsed(collapsedHight != top);
         });
