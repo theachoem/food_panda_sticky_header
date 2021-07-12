@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   }
 
   bool onScrollNotification(ScrollNotification notification) {
-    if (pauseRectGetterIndex) return false;
+    if (pauseRectGetterIndex) return true;
     int lastTabIndex = tabController.length - 1;
     List<int> visibleItems = getVisibleItemsIndex();
 
@@ -71,7 +71,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       int middleIndex = sumIndex ~/ visibleItems.length;
       if (tabController.index != middleIndex) tabController.animateTo(middleIndex);
     }
-
     return false;
   }
 
@@ -100,7 +99,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   Widget buildSliverScrollView() {
     return CustomScrollView(
-      physics: const ClampingScrollPhysics(),
       controller: scrollController,
       slivers: [
         buildAppBar(),
@@ -125,12 +123,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   SliverList buildBody() {
     return SliverList(
-      delegate: SliverChildListDelegate(
-        List.generate(data.categories.length, (index) {
+      delegate: SliverChildListDelegate(List.generate(
+        data.categories.length,
+        (index) {
           itemKeys[index] = RectGetter.createGlobalKey();
           return buildCategoryItem(index);
-        }),
-      ),
+        },
+      )),
     );
   }
 
