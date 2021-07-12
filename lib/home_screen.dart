@@ -29,35 +29,14 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void initState() {
     tabController = TabController(length: data.categories.length, vsync: this);
     scrollController = AutoScrollController();
-    scrollController.addListener(_listener);
     super.initState();
   }
 
   @override
   void dispose() {
-    scrollController.removeListener(_listener);
     scrollController.dispose();
     tabController.dispose();
     super.dispose();
-  }
-
-  void _listener() {
-    double reachCollapsed = expandedHeight - collapsedHeight - 48;
-    if (tabController.indexIsChanging == true) return;
-
-    bool reachFirstIndex = scrollController.offset <= reachCollapsed;
-    bool reachLastIndex = scrollController.offset >= scrollController.position.maxScrollExtent - 20;
-
-    if (reachFirstIndex) {
-      tabController.animateTo(0);
-    } else if (reachLastIndex) {
-      tabController.animateTo(tabController.length - 1);
-    } else {
-      if (pauseRectGetterIndex) return;
-      List<int> value = getVisibleItemsIndex();
-      int sumIndex = value.reduce((value, element) => value + element);
-      tabController.animateTo(sumIndex ~/ value.length);
-    }
   }
 
   List<int> getVisibleItemsIndex() {
@@ -79,6 +58,31 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     setState(() => this.isCollapsed = value);
   }
 
+  bool onScrollNotification(ScrollNotification notification) {
+    if (pauseRectGetterIndex) return false;
+    int lastTabIndex = tabController.length - 1;
+    List<int> visibleItems = getVisibleItemsIndex();
+
+    bool reachLastTabIndex = visibleItems.length <= 2 && visibleItems.last == lastTabIndex;
+    if (reachLastTabIndex) {
+      tabController.animateTo(lastTabIndex);
+    } else {
+      int sumIndex = visibleItems.reduce((value, element) => value + element);
+      int middleIndex = sumIndex ~/ visibleItems.length;
+      if (tabController.index != middleIndex) tabController.animateTo(middleIndex);
+    }
+
+    return false;
+  }
+
+  void animateAndScrollTo(int index) {
+    pauseRectGetterIndex = true;
+    tabController.animateTo(index);
+    scrollController
+        .scrollToIndex(index, preferPosition: AutoScrollPosition.begin)
+        .then((value) => pauseRectGetterIndex = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,14 +90,22 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       backgroundColor: scheme.background,
       body: RectGetter(
         key: listViewKey,
-        child: CustomScrollView(
-          controller: scrollController,
-          slivers: [
-            buildAppBar(),
-            buildBody(),
-          ],
+        child: NotificationListener<ScrollNotification>(
+          child: buildSliverScrollView(),
+          onNotification: onScrollNotification,
         ),
       ),
+    );
+  }
+
+  Widget buildSliverScrollView() {
+    return CustomScrollView(
+      physics: const ClampingScrollPhysics(),
+      controller: scrollController,
+      slivers: [
+        buildAppBar(),
+        buildBody(),
+      ],
     );
   }
 
@@ -107,10 +119,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       isCollapsed: isCollapsed,
       onCollapsed: onCollapsed,
       tabController: tabController,
-      onTap: (int index) {
-        pauseRectGetterIndex = true;
-        scrollController.scrollToIndex(index).then((value) => pauseRectGetterIndex = false);
-      },
+      onTap: (index) => animateAndScrollTo(index),
     );
   }
 
