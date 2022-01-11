@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     bool reachLastTabIndex = visibleItems.isNotEmpty && visibleItems.length <= 2 && visibleItems.last == lastTabIndex;
     if (reachLastTabIndex) {
       tabController.animateTo(lastTabIndex);
-    } else {
+    } else if (visibleItems.isNotEmpty) {
       int sumIndex = visibleItems.reduce((value, element) => value + element);
       int middleIndex = sumIndex ~/ visibleItems.length;
       if (tabController.index != middleIndex) tabController.animateTo(middleIndex);
