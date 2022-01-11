@@ -40,6 +40,7 @@ class HeaderClip extends StatelessWidget {
             ),
             child: Column(
               children: [
+                const SizedBox(height: 4.0),
                 Text(
                   data.title,
                   style: textTheme.headline5?.copyWith(
