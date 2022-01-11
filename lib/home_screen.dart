@@ -123,17 +123,15 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   SliverList buildBody() {
     return SliverList(
-      delegate: SliverChildListDelegate(List.generate(
-        data.categories.length,
-        (index) {
-          itemKeys[index] = RectGetter.createGlobalKey();
-          return buildCategoryItem(index);
-        },
-      )),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) => buildCategoryItem(index),
+        childCount: data.categories.length,
+      ),
     );
   }
 
   Widget buildCategoryItem(int index) {
+    itemKeys[index] = RectGetter.createGlobalKey();
     Category category = data.categories[index];
     return RectGetter(
       key: itemKeys[index],
